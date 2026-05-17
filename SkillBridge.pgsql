@@ -27,4 +27,17 @@ CREATE TABLE freelancer_profiles (
         FOREIGN KEY (user_id)
         REFERENCES users(id)
         ON DELETE CASCADE
+); 
+
+CREATE TABLE client_profiles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID UNIQUE NOT NULL,
+    company_name VARCHAR(150),
+    location VARCHAR(150),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_client_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 );
