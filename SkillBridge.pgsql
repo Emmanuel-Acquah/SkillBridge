@@ -41,3 +41,17 @@ CREATE TABLE client_profiles (
         REFERENCES users(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE services (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    freelancer_id UUID NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    category VARCHAR(100),
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_service_freelancer
+        FOREIGN KEY (freelancer_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
