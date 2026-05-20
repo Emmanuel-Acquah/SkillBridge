@@ -12,6 +12,9 @@ const RootLayout = () => {
       >
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(screens)" options={{ presentation: "card" }} />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(servicetabs)" />
+        <Stack.Screen name="(servicescreens)" />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>

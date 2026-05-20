@@ -21,6 +21,9 @@ import {
   Clapperboard,
   MessageCircle,
   User,
+  LayoutDashboard,
+  FileText,
+  Wallet,
 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "../contexts/ThemeContext";
@@ -163,13 +166,23 @@ const TabItem: React.FC<TabItemProps> = ({
   );
 };
 
-const TABS = [
+const CLIENT_TABS = [
   { name: "ClientDashboard", label: "Home", icon: Home },
   { name: "Explore", label: "Explore", icon: Compass },
   { name: "Reels", label: "Reels", icon: Clapperboard },
   { name: "Messages", label: "Messages", icon: MessageCircle },
   { name: "Profile", label: "Profile", icon: User },
 ];
+
+const SERVICE_TABS = [
+  { name: "ServiceDashboard", label: "Dashboard", icon: LayoutDashboard },
+  { name: "Requests", label: "Requests", icon: FileText },
+  { name: "Messages", label: "Messages", icon: MessageCircle },
+  { name: "Earnings", label: "Earnings", icon: Wallet },
+  { name: "Profile", label: "Profile", icon: User },
+];
+
+const ALL_TABS = [...CLIENT_TABS, ...SERVICE_TABS];
 
 const AnimatedTabBar: React.FC<BottomTabBarProps> = ({
   state,
@@ -216,7 +229,7 @@ const AnimatedTabBar: React.FC<BottomTabBarProps> = ({
 
       <View style={styles.tabsRow}>
         {state.routes.map((route, index) => {
-          const tab = TABS.find((t) => t.name === route.name) || TABS[index];
+          const tab = ALL_TABS.find((t) => t.name === route.name) || ALL_TABS[index];
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
 
