@@ -12,9 +12,10 @@ const ScreensLayout = () => {
         animation: "slide_from_right",
       }}
     >
-      <Stack.Screen name="notification" />
+      <Stack.Screen name="Notification" />
       <Stack.Screen name="CreatePost" />
       <Stack.Screen name="Settings" />
+      <Stack.Screen name="ClientsDashbord" />
     </Stack>
   );
 };

@@ -17,7 +17,8 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   Home,
-  Compass,
+  Search,
+  ClipboardList,
   Clapperboard,
   MessageCircle,
   User,
@@ -81,24 +82,7 @@ const TabItem: React.FC<TabItemProps> = ({
     };
   });
 
-  const animatedLabelStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      animatedValue.value,
-      [0, 1],
-      [0, 1],
-      Extrapolation.CLAMP,
-    );
-    const translateY = interpolate(
-      animatedValue.value,
-      [0, 1],
-      [4, 0],
-      Extrapolation.CLAMP,
-    );
-    return {
-      opacity,
-      transform: [{ translateY }],
-    };
-  });
+  // Removed animatedLabelStyle as text labels are hidden to match Instagram navigation tabs
 
   const animatedDotStyle = useAnimatedStyle(() => {
     const scale = interpolate(
@@ -139,21 +123,7 @@ const TabItem: React.FC<TabItemProps> = ({
         />
       </Animated.View>
 
-      <Animated.Text
-        style={[
-          styles.tabLabel,
-          {
-            color: isFocused
-              ? theme.colors.tabBarActive
-              : theme.colors.tabBarInactive,
-            fontFamily: isFocused ? theme.fonts.semiBold : theme.fonts.medium,
-          },
-          animatedLabelStyle,
-        ]}
-        numberOfLines={1}
-      >
-        {label}
-      </Animated.Text>
+      {/* Label hidden to match Instagram styling */}
 
       <Animated.View
         style={[
@@ -167,10 +137,10 @@ const TabItem: React.FC<TabItemProps> = ({
 };
 
 const CLIENT_TABS = [
-  { name: "ClientDashboard", label: "Home", icon: Home },
-  { name: "Explore", label: "Explore", icon: Compass },
+  { name: "Home", label: "Home", icon: Home },
+  { name: "Explore", label: "Search", icon: Search },
+  { name: "Order", label: "Orders", icon: ClipboardList },
   { name: "Reels", label: "Reels", icon: Clapperboard },
-  { name: "Messages", label: "Messages", icon: MessageCircle },
   { name: "Profile", label: "Profile", icon: User },
 ];
 
@@ -195,12 +165,17 @@ const AnimatedTabBar: React.FC<BottomTabBarProps> = ({
   // Animated sliding indicator
   const indicatorPosition = useSharedValue(0);
 
+  const activeRouteName = state.routes[state.index]?.name;
+  const activeTabIndex = ALL_TABS.findIndex((t) => t.name === activeRouteName);
+
   useEffect(() => {
-    indicatorPosition.value = withSpring(
-      state.index * TAB_WIDTH,
-      SPRING_CONFIG,
-    );
-  }, [state.index]);
+    if (activeTabIndex !== -1) {
+      indicatorPosition.value = withSpring(
+        activeTabIndex * TAB_WIDTH,
+        SPRING_CONFIG,
+      );
+    }
+  }, [activeTabIndex]);
 
   const animatedIndicatorStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: indicatorPosition.value }],
@@ -213,7 +188,8 @@ const AnimatedTabBar: React.FC<BottomTabBarProps> = ({
         {
           backgroundColor: theme.colors.tabBarBackground,
           borderTopColor: theme.colors.border,
-          paddingBottom: Platform.OS === "ios" ? insets.bottom : 12,
+          // Guarantee a safe, comfortable bottom spacing on Android to prevent system bar interference
+          paddingBottom: Platform.OS === "ios" ? (insets.bottom || 12) : Math.max(insets.bottom, 22),
         },
         theme.dark ? styles.containerDarkShadow : styles.containerLightShadow,
       ]}
@@ -229,7 +205,8 @@ const AnimatedTabBar: React.FC<BottomTabBarProps> = ({
 
       <View style={styles.tabsRow}>
         {state.routes.map((route, index) => {
-          const tab = ALL_TABS.find((t) => t.name === route.name) || ALL_TABS[index];
+          const tab = ALL_TABS.find((t) => t.name === route.name);
+          if (!tab) return null;
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
 

@@ -27,7 +27,6 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({
   avatarUrl,
   notificationCount = 0,
-  messageCount = 0,
   onNotificationPress,
   onCreatePress,
   onAvatarPress,
@@ -44,13 +43,13 @@ const Navbar: React.FC<NavbarProps> = ({
     }
   };
 
-const handleCreatePress = () => {
-  if (onCreatePress) {
-    onCreatePress();
-  } else {
-    navigation.navigate("(screens)", { screen: "CreatePost" });
-  }
-};
+  const handleCreatePress = () => {
+    if (onCreatePress) {
+      onCreatePress();
+    } else {
+      navigation.navigate("(screens)", { screen: "CreatePost" });
+    }
+  };
 
   const handleAvatarPress = () => {
     if (onAvatarPress) {
