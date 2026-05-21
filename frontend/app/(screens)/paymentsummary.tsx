@@ -6,36 +6,30 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   StatusBar,
   Image,
 } from "react-native";
 import { useRouter } from "expo-router";
-import * as Haptics from "expo-haptics";
 import { ArrowLeft, Plus, ShieldCheck, Shield, Smartphone, Building } from "lucide-react-native";
 import { useTheme } from "../contexts/ThemeContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PaymentSummary = () => {
   const router = useRouter();
   const { theme, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [selectedMethod, setSelectedMethod] = useState<"card" | "mobile" | "bank">("card");
   const [promoCode, setPromoCode] = useState("");
 
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.back();
   };
 
   const handlePayNow = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Medium);
     router.push("/(screens)/body2" as any);
   };
 
@@ -65,7 +59,19 @@ const PaymentSummary = () => {
         <View style={styles.headerRightSpacer} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 0}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={[
+            styles.scrollContent,
+            { paddingBottom: 40 + insets.bottom },
+          ]}
+        >
         
         {/* Order Summary */}
         <View style={[styles.card, { backgroundColor: isDark ? "#12131A" : "#FFFFFF" }]}>
@@ -99,7 +105,7 @@ const PaymentSummary = () => {
         <View style={[styles.card, { backgroundColor: isDark ? "#12131A" : "#FFFFFF" }]}>
           <View style={styles.sectionHeaderRow}>
             <Text style={[styles.sectionTitle, { color: isDark ? "#FFFFFF" : "#1A202C", flex: 1 }]}>Payment Method</Text>
-            <TouchableOpacity style={styles.addCardBtn} activeOpacity={0.7} onPress={() => triggerHaptic(Haptics.ImpactFeedbackStyle.Light)}>
+            <TouchableOpacity style={styles.addCardBtn} activeOpacity={0.7} onPress={() => {}}>
               <Plus size={14} color={theme.colors.primary} />
               <Text style={[styles.addCardText, { color: theme.colors.primary }]}>Add New Card</Text>
             </TouchableOpacity>
@@ -108,7 +114,7 @@ const PaymentSummary = () => {
           {/* Option 1: Card */}
           <TouchableOpacity 
             activeOpacity={0.8}
-            onPress={() => { triggerHaptic(Haptics.ImpactFeedbackStyle.Light); setSelectedMethod("card"); }}
+            onPress={() => { setSelectedMethod("card"); }}
             style={[
               styles.paymentOption,
               { backgroundColor: isDark ? "#1C1D26" : "#FFFFFF" },
@@ -128,7 +134,7 @@ const PaymentSummary = () => {
           {/* Option 2: Mobile Money */}
           <TouchableOpacity 
             activeOpacity={0.8}
-            onPress={() => { triggerHaptic(Haptics.ImpactFeedbackStyle.Light); setSelectedMethod("mobile"); }}
+            onPress={() => { setSelectedMethod("mobile"); }}
             style={[
               styles.paymentOption,
               { backgroundColor: isDark ? "#1C1D26" : "#FFFFFF" },
@@ -148,7 +154,7 @@ const PaymentSummary = () => {
           {/* Option 3: Direct Bank Transfer */}
           <TouchableOpacity 
             activeOpacity={0.8}
-            onPress={() => { triggerHaptic(Haptics.ImpactFeedbackStyle.Light); setSelectedMethod("bank"); }}
+            onPress={() => { setSelectedMethod("bank"); }}
             style={[
               styles.paymentOption,
               { backgroundColor: isDark ? "#1C1D26" : "#FFFFFF" },
@@ -228,7 +234,8 @@ const PaymentSummary = () => {
             <Text style={styles.applyText}>Apply</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

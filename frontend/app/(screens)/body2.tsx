@@ -10,30 +10,30 @@ import {
   StatusBar,
 } from "react-native";
 import { useRouter } from "expo-router";
-import * as Haptics from "expo-haptics";
 import { CheckCircle2, TrendingUp, ShieldCheck, Lock, Headset } from "lucide-react-native";
 import { useTheme } from "../contexts/ThemeContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Body2 = () => {
   const router = useRouter();
   const { theme, isDark } = useTheme();
-
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
+  const insets = useSafeAreaInsets();
 
   const handleDone = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-    router.push("/(tabs)/ClientDashboard" as any);
+    router.push("/(tabs)/Home" as any);
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? "#0A0B10" : "#F4F0FA" }]}>
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: 40 + insets.bottom },
+        ]}
+      >
         
         {/* Success Icon */}
         <View style={styles.successIconContainer}>
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
-    marginTop: "auto",
+    marginTop: 24,
   },
   doneButtonText: {
     color: "#FFFFFF",
