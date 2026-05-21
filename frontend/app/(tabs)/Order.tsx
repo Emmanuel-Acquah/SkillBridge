@@ -82,7 +82,7 @@ export default function OrderScreen() {
               </View>
 
               <View style={styles.actionRow}>
-                <TouchableOpacity style={styles.btnPrimary}>
+                <TouchableOpacity style={styles.btnPrimary} onPress={() => router.push(`/(screens)/orderDetails?job=fintech`)}>
                   <Text style={styles.btnPrimaryText}>View Details</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btnSecondary} onPress={() => router.push('/(tabs)/Messages')}>
@@ -113,7 +113,7 @@ export default function OrderScreen() {
           </View>
 
           {/* Secondary Card 1 */}
-          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8} onPress={() => router.push(`/(screens)/deliveryReview?job=fintech`)}>
             <View style={styles.badgeRow}>
               <View style={styles.statusBadgeOrange}>
                 <Text style={styles.statusTextOrange}>Awaiting Review</Text>
@@ -135,7 +135,7 @@ export default function OrderScreen() {
           </TouchableOpacity>
 
           {/* Secondary Card 2 */}
-          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8} onPress={() => router.push(`/(screens)/orderDetails?job=seo`)}>
             <View style={styles.badgeRow}>
               <View style={styles.statusBadgeGreen}>
                 <Text style={styles.statusTextGreen}>In Progress</Text>
