@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../constants/Theme';
 
 type Milestone = {
@@ -78,7 +77,6 @@ function badgeStyle(status: Milestone['status']) {
 
 export default function OrderDetailsScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { job } = useLocalSearchParams<{ job?: string }>();
   const details = ORDER_DATA[job === 'seo' ? 'seo' : 'fintech'];
 
@@ -189,13 +187,10 @@ export default function OrderDetailsScreen() {
                 </View>
               ))}
             </View>
-          </ScrollView>
-
-          <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
             <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
               <Text style={styles.revisionBtnText}>Request Revision</Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </>
       )}
     </SafeAreaView>
@@ -219,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#1D2434' },
-  content: { paddingHorizontal: 10, paddingBottom: 96 },
+  content: { paddingHorizontal: 10, paddingBottom: 28 },
 
   heroCard: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 8, marginBottom: 10 },
   heroImage: { height: 160, justifyContent: 'space-between' },
@@ -283,6 +278,7 @@ const styles = StyleSheet.create({
   itemDivider: { borderBottomWidth: 1, borderBottomColor: '#F0F1F6' },
 
   revisionBtn: {
+    marginTop: 16,
     borderWidth: 1.5,
     borderColor: '#9B75FF',
     borderRadius: 999,
@@ -291,13 +287,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAF8FF',
   },
   revisionBtnText: { color: C.purple, fontWeight: '700', fontSize: 12 },
-  footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#F6F7FB',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-  },
 });

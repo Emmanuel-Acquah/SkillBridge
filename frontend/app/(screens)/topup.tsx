@@ -144,16 +144,13 @@ export default function TopUpScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={{ height: 100 }} />
-      </ScrollView>
-
-      {/* Footer Continue */}
-      <View style={styles.footer}>
         <TouchableOpacity style={styles.continueBtn} onPress={handleContinue}>
           <Text style={styles.continueBtnText}>Continue</Text>
           <Ionicons name="chevron-forward" size={18} color={C.white} />
         </TouchableOpacity>
-      </View>
+
+        <View style={{ height: 20 }} />
+      </ScrollView>
 
     </SafeAreaView>
   );
@@ -166,7 +163,7 @@ const styles = StyleSheet.create({
   helpBtn: { padding: 4 },
   headerTitle: { fontSize: 18, fontWeight: '700', color: C.purple },
   scroll: { flex: 1 },
-  scrollContent: { paddingHorizontal: 16, paddingTop: 20 },
+  scrollContent: { paddingHorizontal: 16, paddingTop: 20, paddingBottom: 24 },
 
   balanceCard: { backgroundColor: C.purple, borderRadius: 20, padding: 24, marginBottom: 24, shadowColor: C.purple, shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 6 },
   balanceTop: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
@@ -208,7 +205,6 @@ const styles = StyleSheet.create({
   radioActive: { borderColor: C.purple },
   radioInner: { width: 12, height: 12, borderRadius: 6, backgroundColor: C.purple },
 
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, paddingHorizontal: 16, paddingVertical: 20, backgroundColor: C.white, borderTopWidth: 1, borderTopColor: '#F3F4F6' },
   continueBtn: { flexDirection: 'row', backgroundColor: C.purple, paddingVertical: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', shadowColor: C.purple, shadowOpacity: 0.3, shadowRadius: 8, shadowOffset: { width: 0, height: 4 }, elevation: 5 },
   continueBtnText: { color: C.white, fontSize: 16, fontWeight: '600', marginRight: 4 },
 });

@@ -3,12 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../constants/Theme';
 
 export default function RequestRevisionScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { job } = useLocalSearchParams<{ job?: string }>();
   const [note, setNote] = useState('');
 
@@ -74,15 +72,12 @@ export default function RequestRevisionScreen() {
             Your expert is committed to 2 rounds of minor revisions per milestone. Complex scope changes may require a custom quote.
           </Text>
         </View>
-      </ScrollView>
-
-      <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }] }>
         <TouchableOpacity style={styles.submitBtn}>
           <Text style={styles.submitText}>Submit Revision Request</Text>
           <Ionicons name="paper-plane-outline" size={14} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.footerHint}>The expert usually responds within 24 hours.</Text>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -100,7 +95,7 @@ const styles = StyleSheet.create({
   iconBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#20283B' },
 
-  content: { paddingHorizontal: 10, paddingBottom: 170 },
+  content: { paddingHorizontal: 10, paddingBottom: 28 },
   contextCard: {
     marginTop: 8,
     backgroundColor: '#ECECF4',
@@ -162,19 +157,8 @@ const styles = StyleSheet.create({
   guaranteeLabel: { fontSize: 10, fontWeight: '700', color: '#A66B00' },
   guaranteeText: { marginTop: 6, fontSize: 11, color: '#6F5A37', lineHeight: 16 },
 
-  footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E8F1',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 12,
-  },
   submitBtn: {
+    marginTop: 10,
     backgroundColor: C.purple,
     borderRadius: 10,
     paddingVertical: 12,

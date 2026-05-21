@@ -80,14 +80,12 @@ export default function WithdrawFundsScreen() {
           <Text style={styles.infoText}>Withdrawals may take 1-3 business days to reflect in your account depending on your provider.</Text>
         </View>
 
-      </ScrollView>
-
-      <View style={styles.footer}>
         <TouchableOpacity style={styles.continueBtn} onPress={() => router.push('/(screens)/withdrawVerification')}>
           <Text style={styles.continueBtnText}>Continue</Text>
           <Ionicons name="arrow-forward" size={18} color="#FFF" />
         </TouchableOpacity>
-      </View>
+
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 15, fontWeight: '700', color: C.purple, flex: 1, marginLeft: 10 },
   avatar: { width: 30, height: 30, borderRadius: 15 },
   scroll: { flex: 1 },
-  scrollContent: { paddingHorizontal: 14, paddingVertical: 14, paddingBottom: 90 },
+  scrollContent: { paddingHorizontal: 14, paddingVertical: 14, paddingBottom: 24 },
   
   balanceCard: { backgroundColor: C.purple, borderRadius: 14, padding: 18, marginBottom: 18, shadowColor: C.purple, shadowOpacity: 0.25, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 4 },
   balanceLabel: { color: 'rgba(255,255,255,0.75)', fontSize: 11, fontWeight: '500', marginBottom: 5 },
@@ -127,7 +125,6 @@ const styles = StyleSheet.create({
   infoBox: { flexDirection: 'row', backgroundColor: '#F3F4F6', borderRadius: 10, padding: 11, alignItems: 'flex-start', gap: 8, marginBottom: 12 },
   infoText: { flex: 1, fontSize: 10, color: C.med, lineHeight: 14 },
 
-  footer: { paddingHorizontal: 14, paddingBottom: 16, paddingTop: 10, backgroundColor: '#FFF', borderTopWidth: 1, borderTopColor: '#E5E7EB', position: 'absolute', bottom: 0, left: 0, right: 0 },
   continueBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#7134FF', borderRadius: 18, paddingVertical: 14, gap: 5 },
   continueBtnText: { color: '#FFF', fontSize: 14, fontWeight: '600' }
 });

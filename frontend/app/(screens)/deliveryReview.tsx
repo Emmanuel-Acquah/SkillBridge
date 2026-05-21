@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useState } from 'react';
 import { C } from '../../constants/Theme';
 
 const FILES_FINTECH = [
@@ -18,8 +18,8 @@ const FILES_SEO = [
 
 export default function DeliveryReviewScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { job } = useLocalSearchParams<{ job?: string }>();
+  const [rating, setRating] = useState(4);
 
   const FILES = job === 'seo' ? FILES_SEO : FILES_FINTECH;
 
@@ -109,20 +109,23 @@ export default function DeliveryReviewScreen() {
           <Text style={styles.rateSub}>How was David’s work?</Text>
           <View style={styles.stars}>
             {[1, 2, 3, 4, 5].map((n) => (
-              <Ionicons key={n} name="star-outline" size={20} color="#C9CCDA" />
+              <TouchableOpacity key={n} onPress={() => setRating(n)} hitSlop={10}>
+                <Ionicons name={n <= rating ? 'star' : 'star-outline'} size={24} color={n <= rating ? '#FBBF24' : '#C9CCDA'} />
+              </TouchableOpacity>
             ))}
           </View>
+          <Text style={styles.ratingValue}>{rating.toFixed(1)} / 5.0</Text>
+        </View>
+
+        <View style={styles.actionStack}>
+          <TouchableOpacity style={styles.approveBtn}>
+            <Text style={styles.approveText}>Approve Delivery</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
+            <Text style={styles.revisionText}>Request Revision</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-
-      <View style={[styles.footer, { paddingBottom: 14 + insets.bottom }] }>
-        <TouchableOpacity style={styles.approveBtn}>
-          <Text style={styles.approveText}>Approve Delivery</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
-          <Text style={styles.revisionText}>Request Revision</Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -142,7 +145,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 21, fontWeight: '700', color: '#1F2638' },
   headerSub: { marginTop: 1, fontSize: 9, color: '#9599AC', fontWeight: '700', letterSpacing: 0.4 },
 
-  content: { paddingHorizontal: 10, paddingBottom: 170 },
+  content: { paddingHorizontal: 10, paddingBottom: 28 },
   awaitingCard: {
     marginTop: 8,
     flexDirection: 'row',
@@ -209,20 +212,8 @@ const styles = StyleSheet.create({
   rateTitle: { fontSize: 15, fontWeight: '700', color: '#21293E' },
   rateSub: { marginTop: 3, fontSize: 12, color: '#7D839B' },
   stars: { marginTop: 8, flexDirection: 'row', gap: 8 },
-
-  footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E8EAF3',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 14,
-    gap: 10,
-  },
+  ratingValue: { marginTop: 6, fontSize: 11, color: '#6B7280', fontWeight: '700' },
+  actionStack: { marginTop: 18, gap: 10 },
   approveBtn: { backgroundColor: C.purple, borderRadius: 999, paddingVertical: 13, alignItems: 'center' },
   approveText: { color: '#FFFFFF', fontSize: 13, fontWeight: '700' },
   revisionBtn: { borderRadius: 999, borderWidth: 1.5, borderColor: '#C6B8F8', paddingVertical: 12, alignItems: 'center', backgroundColor: '#FAF8FF' },
