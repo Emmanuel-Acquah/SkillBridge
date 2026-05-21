@@ -8,16 +8,15 @@ import {
   StyleSheet,
   FlatList,
   StatusBar,
-  Dimensions,
   Platform,
   StatusBar as RNStatusBar,
   ImageBackground,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import StandardHeader from '../components/StandardHeader';
 
-const PURPLE = '#6B5CE7';
-const PURPLE_LIGHT = '#7B6CF0';
+const PURPLE = '#5112B5';
 const BG = '#F5F5F8';
 const WHITE = '#FFFFFF';
 const TEXT_DARK = '#1A1A2E';
@@ -78,8 +77,8 @@ const categories = [
   { id: '2', label: 'Design',      iconName: 'brush-outline',              iconType: 'Ionicons' },
   { id: '3', label: 'Tutoring',    iconName: 'school-outline',             iconType: 'Ionicons' },
   { id: '4', label: 'Coding',      iconName: 'console',                    iconType: 'MaterialCommunityIcons' },
-  { id: '5', label: 'Marketing',   iconName: 'bar-chart-2',                iconType: 'Feather' },
-  { id: '6', label: 'Translation', iconName: 'translate',                  iconType: 'MaterialIcons' },
+  { id: '5', label: 'Marketing',   iconName: 'bar-chart-outline',          iconType: 'Ionicons' },
+  { id: '6', label: 'Translation', iconName: 'translate',                  iconType: 'MaterialCommunityIcons' },
 ];
 
 const recommended = [
@@ -101,7 +100,7 @@ const recommended = [
     title: 'Blockchain Smart Contracts',
     seller: 'By David Chen, Level 2',
     badge: 'FEATURED',
-    badgeColor: '#6B5CE7',
+    badgeColor: '#5112B5',
     rating: '4.8(4)',
     price: '$750',
     from: 'from ',
@@ -181,9 +180,11 @@ const SectionHeader = ({
 }) => (
   <View style={styles.sectionHeader}>
     <Text style={styles.sectionTitle}>{title}</Text>
-    <TouchableOpacity onPress={onPress}>
-      <Text style={styles.sectionAction}>{actionLabel}</Text>
-    </TouchableOpacity>
+    {actionLabel ? (
+      <TouchableOpacity onPress={onPress} disabled={!onPress}>
+        <Text style={styles.sectionAction}>{actionLabel}</Text>
+      </TouchableOpacity>
+    ) : null}
   </View>
 );
 
@@ -293,36 +294,12 @@ const TransactionRow = ({ item }: { item: (typeof transactions)[0] }) => (
 
 // ── SCREEN ───────────────────────────────────
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
 export default function DashboardScreen() {
-  const [showAllCategories, setShowAllCategories] = React.useState(false);
-  // Any modern mobile screen >= 355dp (which covers almost all modern smartphones like Note 20 Ultra) fits all 6 categories beautifully!
-  const fitsAllCategories = SCREEN_WIDTH >= 355;
-
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor={WHITE} />
       {/* ── Sticky Header ── */}
-      <View style={styles.header}>
-        <Text style={{ fontSize: 22, fontWeight: '800', color: PURPLE, letterSpacing: -0.5 }}>
-          SkillBridge
-        </Text>
-        <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/(screens)/Notification')}>
-            <Ionicons name="notifications-outline" size={24} color={TEXT_DARK} />
-            {/* Notification dot */}
-            <View style={styles.notifDot} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/(tabs)/Messages')}>
-            <Ionicons name="chatbubble-ellipses-outline" size={23} color={TEXT_DARK} />
-          </TouchableOpacity>
-          {/* User Avatar Initials */}
-          <View style={[styles.userAvatar, { alignItems: 'center', justifyContent: 'center' }]}>
-            <Text style={{ color: WHITE, fontWeight: 'bold', fontSize: 13 }}>A</Text>
-          </View>
-        </View>
-      </View>
+      <StandardHeader />
 
       <ScrollView
         style={styles.scroll}
@@ -330,22 +307,24 @@ export default function DashboardScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* ── Welcome ── */}
-        <Text style={styles.welcomeText}>Welcome back, Alex!</Text>
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeSubtitle}>Welcome back, </Text>
+          <Text style={styles.welcomeTitle}>Alex!</Text>
+        </View>
 
         {/* ── Wallet Card ── */}
         <View style={styles.walletCard}>
-          <Text style={styles.walletLabel}>WALLET BALANCE</Text>
+          <View style={styles.walletHeader}>
+            <Text style={styles.walletLabel}>WALLET BALANCE</Text>
+            <Ionicons name="wallet-outline" size={24} color="rgba(255,255,255,0.4)" />
+          </View>
           <Text style={styles.walletAmount}>$4,285.50</Text>
           <View style={styles.walletActions}>
-            <TouchableOpacity style={styles.walletBtn}>
-              <Text style={styles.walletBtnText}>Top Up</Text>
+            <TouchableOpacity style={styles.walletBtnPrimary} onPress={() => router.push('/(screens)/topup')}>
+              <Text style={styles.walletBtnPrimaryText}>Top Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.walletBtn, styles.walletBtnOutline]}
-            >
-              <Text style={[styles.walletBtnText, styles.walletBtnTextOutline]}>
-                Withdraw
-              </Text>
+            <TouchableOpacity style={styles.walletBtnSecondary} onPress={() => router.push('/(screens)/withdrawFunds')}>
+              <Text style={styles.walletBtnSecondaryText}>Withdraw</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -361,38 +340,18 @@ export default function DashboardScreen() {
         ))}
 
         {/* ── Categories ── */}
-        <SectionHeader 
-          title="Categories" 
-          actionLabel={fitsAllCategories ? undefined : (showAllCategories ? "Show Less" : "View All")}
-          onPress={fitsAllCategories ? undefined : () => setShowAllCategories(!showAllCategories)}
+        <SectionHeader title="Categories" actionLabel={undefined} />
+        <FlatList
+          data={categories}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(i) => i.id}
+          contentContainerStyle={styles.categoriesRow}
+          renderItem={({ item }) => <CategoryItem item={item} />}
         />
-        {fitsAllCategories ? (
-          <View style={styles.categoriesRowBalanced}>
-            {categories.map((item) => (
-              <CategoryItem key={item.id} item={item} />
-            ))}
-          </View>
-        ) : showAllCategories ? (
-          <View style={styles.categoriesGrid}>
-            {categories.map((item) => (
-              <View key={item.id} style={styles.gridItemWrapper}>
-                <CategoryItem item={item} />
-              </View>
-            ))}
-          </View>
-        ) : (
-          <FlatList
-            data={categories.slice(0, 4)}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(i) => i.id}
-            contentContainerStyle={styles.categoriesRow}
-            renderItem={({ item }) => <CategoryItem item={item} />}
-          />
-        )}
 
         {/* ── Recommended ── */}
-        <SectionHeader title="Recommended for You" actionLabel="Explore All" />
+        <SectionHeader title="Recommended for You" actionLabel="See All" />
         <FlatList
           data={recommended}
           horizontal
@@ -403,7 +362,7 @@ export default function DashboardScreen() {
         />
 
         {/* ── Top Experts ── */}
-        <SectionHeader title="Top Experts" />
+        <SectionHeader title="Top Experts" actionLabel={undefined} />
         {experts.map((e) => (
           <ExpertRow key={e.id} item={e} />
         ))}
@@ -412,7 +371,11 @@ export default function DashboardScreen() {
         </TouchableOpacity>
 
         {/* ── Recent Transactions ── */}
-        <SectionHeader title="Recent Transactions" />
+        <SectionHeader 
+          title="Recent Transactions" 
+          actionLabel="View All"
+          onPress={() => router.push('/(screens)/TransactionHistory')} 
+        />
         {transactions.map((tx) => (
           <TransactionRow key={tx.id} item={tx} />
         ))}
@@ -488,14 +451,24 @@ const styles = StyleSheet.create({
   },
 
   // Welcome
-  welcomeText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: TEXT_DARK,
+  welcomeContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
-    backgroundColor: WHITE,
+    paddingTop: 24,
+    paddingBottom: 20,
+    backgroundColor: BG,
+  },
+  welcomeSubtitle: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: TEXT_MED,
+  },
+  welcomeTitle: {
+    fontSize: 19,
+    fontWeight: '800',
+    color: PURPLE,
+    letterSpacing: -0.2,
   },
 
   // Wallet
@@ -504,44 +477,58 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 20,
     backgroundColor: PURPLE,
-    padding: 20,
+    padding: 24,
+    shadowColor: PURPLE,
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 8,
+  },
+  walletHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
   },
   walletLabel: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
     color: 'rgba(255,255,255,0.7)',
-    letterSpacing: 1,
-    marginBottom: 6,
+    letterSpacing: 0.8,
   },
   walletAmount: {
     fontSize: 34,
-    fontWeight: '700',
+    fontWeight: '800',
     color: WHITE,
-    marginBottom: 16,
+    marginBottom: 24,
   },
   walletActions: {
     flexDirection: 'row',
     gap: 12,
   },
-  walletBtn: {
+  walletBtnPrimary: {
     flex: 1,
-    backgroundColor: PURPLE_LIGHT,
-    borderRadius: 10,
-    paddingVertical: 10,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 12,
+    paddingVertical: 14,
     alignItems: 'center',
   },
-  walletBtnOutline: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.4)',
-  },
-  walletBtnText: {
+  walletBtnPrimaryText: {
     color: WHITE,
     fontWeight: '600',
     fontSize: 14,
   },
-  walletBtnTextOutline: {
-    color: WHITE,
+  walletBtnSecondary: {
+    flex: 1,
+    backgroundColor: WHITE,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  walletBtnSecondaryText: {
+    color: PURPLE,
+    fontWeight: '600',
+    fontSize: 14,
   },
 
   // Section Header
@@ -616,9 +603,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   categoryIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 14,
+    width: 64,
+    height: 64,
+    borderRadius: 16,
     backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
@@ -633,8 +620,9 @@ const styles = StyleSheet.create({
     height: 24,
   },
   categoryLabel: {
-    fontSize: 10,
-    color: TEXT_MED,
+    fontSize: 11,
+    marginTop: 2,
+    color: TEXT_DARK,
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -771,13 +759,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: PURPLE,
+    backgroundColor: '#F3EEFF',
   },
   seeAllText: {
     color: PURPLE,
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 13,
   },
 
   // Transactions
