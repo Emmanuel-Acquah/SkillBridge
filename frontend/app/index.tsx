@@ -1,7 +1,8 @@
-import { Redirect, type RelativePathString } from "expo-router";
+import React from "react";
+import { Redirect } from "expo-router";
 
 const Index = () => {
-  return <Redirect href={"/(tabs)/Home" as RelativePathString} />;
+  return <Redirect href="/(screens)/splashscreen" />;
 };
 
 export default Index;

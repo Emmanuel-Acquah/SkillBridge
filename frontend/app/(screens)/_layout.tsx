@@ -16,6 +16,16 @@ const ScreensLayout = () => {
       <Stack.Screen name="CreatePost" />
       <Stack.Screen name="Settings" />
       <Stack.Screen name="ClientsDashbord" />
+      <Stack.Screen name="Register" />
+      <Stack.Screen name="Login" />
+      <Stack.Screen name="ForgotPassword" />
+      <Stack.Screen name="OTPVerification" />
+      <Stack.Screen name="ResetPassword" />
+      <Stack.Screen name="splashscreen" />
+      <Stack.Screen name="onboardingscreen1" />
+      <Stack.Screen name="onboardingscreen2" />
+      <Stack.Screen name="welcomescreen" />
+      <Stack.Screen name="roleselection" />
     </Stack>
   );
 };
