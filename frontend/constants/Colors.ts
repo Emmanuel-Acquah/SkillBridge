@@ -122,6 +122,10 @@ export const LightColors = {
   // Category Icons
   categoryBackground: palette.purple100,
   categoryIcon: palette.purple600,
+
+  // Background Colors
+  purpleBg: "#EEF2FF",
+  orangeBg: "#FFF7ED",
 };
 
 export const DarkColors = {
@@ -191,6 +195,10 @@ export const DarkColors = {
   // Category Icons
   categoryBackground: palette.dark50,
   categoryIcon: palette.purple400,
+
+  // Background Colors
+  purpleBg: "#2A2540",
+  orangeBg: "#3A2F25",
 };
 
 export type ColorScheme = typeof LightColors;

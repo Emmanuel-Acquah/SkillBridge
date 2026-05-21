@@ -183,11 +183,13 @@ export const C = {
   dark: '#1A1A2E',
   grey: '#9B9BB0',
   med: '#4A4A6A',
-  purple: '#6B5CE7',
+  purple: '#5112B5',
+  purpleBg: '#EEF2FF',
   border: '#E5E5F0',
   greenBg: '#ECFDF5',
   green: '#22C55E',
-  orange: '#F59E0B', 
+  orange: '#F59E0B',
+  orangeBg: '#FFF7ED',
   redBg: '#FEF2F2',
   red: '#EF4444'
 };
