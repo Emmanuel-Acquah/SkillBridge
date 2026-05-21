@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { C } from '../../constants/Theme';
 
 export default function RequestRevisionScreen() {
   const router = useRouter();
+  const { job } = useLocalSearchParams<{ job?: string }>();
   const [note, setNote] = useState('');
 
   return (
@@ -26,8 +27,8 @@ export default function RequestRevisionScreen() {
           </View>
           <View style={styles.contextBody}>
             <Text style={styles.contextLabel}>PROJECT CONTEXT</Text>
-            <Text style={styles.contextTitle}>Premium Fintech Mobile App Design</Text>
-            <Text style={styles.contextMeta}>Expert: Alex Rivera</Text>
+            <Text style={styles.contextTitle}>{job === 'seo' ? 'Enterprise SEO Strategy & Audit' : 'Premium Fintech Mobile App Design'}</Text>
+            <Text style={styles.contextMeta}>Expert: {job === 'seo' ? 'Sarah Jenkins' : 'Alex Rivera'}</Text>
           </View>
         </View>
 

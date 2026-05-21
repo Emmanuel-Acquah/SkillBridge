@@ -165,7 +165,7 @@ export default function OrderDetailsScreen() {
 
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionTitle}>FILES DELIVERED</Text>
-          <TouchableOpacity onPress={() => router.push('/(screens)/deliveryReview')}>
+          <TouchableOpacity onPress={() => router.push(`/(screens)/deliveryReview?job=${job ?? 'fintech'}`)}>
             <Text style={styles.downloadAll}>View Delivery</Text>
           </TouchableOpacity>
         </View>
@@ -187,7 +187,7 @@ export default function OrderDetailsScreen() {
           ))}
         </View>
 
-        <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push('/(screens)/requestRevision')}>
+        <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
           <Text style={styles.revisionBtnText}>Request Revision</Text>
         </TouchableOpacity>
         </ScrollView>

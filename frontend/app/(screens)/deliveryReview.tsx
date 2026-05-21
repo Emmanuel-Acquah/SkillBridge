@@ -2,17 +2,24 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { C } from '../../constants/Theme';
 
-const FILES = [
-  { name: 'Audit_Report_Final.pdf', meta: '1.2 MB • PDF' },
-  { name: 'SmartContract_v3.sol', meta: '45 KB • SOL' },
-  { name: 'Vulnerability_Summary.xlsx', meta: '256 KB • XLSX' },
+const FILES_FINTECH = [
+  { name: 'Fintech_UI_v2.fig', meta: '24.5 MB • FIG' },
+  { name: 'Brand_Assets.zip', meta: '158 MB • ZIP' },
+];
+
+const FILES_SEO = [
+  { name: 'SEO_Audit_Report.pdf', meta: '7.3 MB • PDF' },
+  { name: 'Keyword_Cluster_Map.xlsx', meta: '2.1 MB • XLSX' },
 ];
 
 export default function DeliveryReviewScreen() {
   const router = useRouter();
+  const { job } = useLocalSearchParams<{ job?: string }>();
+
+  const FILES = job === 'seo' ? FILES_SEO : FILES_FINTECH;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -36,7 +43,7 @@ export default function DeliveryReviewScreen() {
           </View>
           <View>
             <Text style={styles.awaitingTitle}>Awaiting your review</Text>
-            <Text style={styles.awaitingSub}>Submitted Oct 22</Text>
+            <Text style={styles.awaitingSub}>{job === 'seo' ? 'Submitted May 20' : 'Submitted Oct 22'}</Text>
           </View>
         </View>
 
@@ -59,7 +66,7 @@ export default function DeliveryReviewScreen() {
 
           <View style={styles.fieldRow}>
             <Text style={styles.fieldLabel}>Project:</Text>
-            <Text style={styles.fieldValue}> Smart Contract Audit & Optimization</Text>
+            <Text style={styles.fieldValue}>{job === 'seo' ? 'Enterprise SEO Strategy & Audit' : 'Premium Fintech Mobile App Design'}</Text>
           </View>
         </View>
 
