@@ -9,11 +9,13 @@ const TabLayout = () => {
         headerShown: false,
       }}
     >
-      <Tabs.Screen name="ClientDashboard" />
+      <Tabs.Screen name="Home" />
       <Tabs.Screen name="Explore" />
-      <Tabs.Screen name="Messages" />
+      <Tabs.Screen name="Order" />
       <Tabs.Screen name="Reels" />
       <Tabs.Screen name="Profile" />
+      {/* Messages is hidden from tab bar but accessible via router.push */}
+      <Tabs.Screen name="Messages" options={{ tabBarButton: () => null }} />
     </Tabs>
   );
 };
