@@ -41,11 +41,8 @@ const UnifiedOnboarding = () => {
   const mobileVisual = require("../../assets/images/welcome_mobile_visual.png");
 
   // Haptic ticks helper
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
+  // Haptics disabled to prevent vibration/shake on slide navigation
+  const triggerHaptic = (_style?: Haptics.ImpactFeedbackStyle) => {};
 
   // Scroll Listener
   const handleScroll = (event: any) => {
@@ -60,7 +57,7 @@ const UnifiedOnboarding = () => {
   // Scroll to index helper
   const scrollToSlide = (index: number) => {
     triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-    scrollViewRef.current?.scrollTo({ x: index * width, animated: true });
+    scrollViewRef.current?.scrollTo({ x: index * width, animated: false });
     setActiveIndex(index);
   };
 

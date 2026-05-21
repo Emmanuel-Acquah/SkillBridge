@@ -57,7 +57,7 @@ export default function WithdrawInitiatedScreen() {
           <TouchableOpacity style={styles.primaryBtn} onPress={() => router.push('/(screens)/TransactionHistory')}>
             <Text style={styles.primaryBtnText}>Track Withdrawal</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryBtn} onPress={() => router.push('/(screens)/ClientsDashbord')}>
+          <TouchableOpacity style={styles.secondaryBtn} onPress={() => router.push('/(tabs)/Home')}>
             <Text style={styles.secondaryBtnText}>Back to Dashboard</Text>
           </TouchableOpacity>
         </View>

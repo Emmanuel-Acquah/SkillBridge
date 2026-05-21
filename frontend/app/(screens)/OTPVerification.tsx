@@ -12,7 +12,6 @@ import {
   StatusBar,
 } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import { ArrowLeft } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
 import { useTheme } from "../contexts/ThemeContext";
@@ -47,16 +46,8 @@ const OTPVerification = () => {
     }
   }, [timeLeft]);
 
-  // Haptic trigger
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   // Navigate back
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/ForgotPassword" as RelativePathString);
   };
 
@@ -84,7 +75,6 @@ const OTPVerification = () => {
   // Handle Resend Code
   const handleResendCode = () => {
     if (canResend) {
-      triggerHaptic(Haptics.ImpactFeedbackStyle.Medium);
       setCanResend(false);
       setTimeLeft(30);
       // Logic to resend OTP goes here
@@ -96,16 +86,8 @@ const OTPVerification = () => {
   const handleVerify = () => {
     const otpString = otp.join("");
     if (otpString.length < 4) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Please enter the 4-digit code.");
       return;
-    }
-
-    // Success haptic
-    if (Platform.OS !== "web") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
 
     // Redirect to the Reset Password flow

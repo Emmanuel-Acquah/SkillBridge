@@ -12,7 +12,6 @@ import {
   StatusBar,
 } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import { ArrowLeft, Mail, ArrowRight, ShieldCheck, Lock } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
 import { useTheme } from "../contexts/ThemeContext";
@@ -32,32 +31,16 @@ const ForgotPassword = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  // Haptic trigger
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   // Back to login page
   const handleBackToLogin = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/Login" as RelativePathString);
   };
 
   // Verification request handler
   const handleSendVerification = () => {
     if (!emailAddress) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Please enter your email address.");
       return;
-    }
-
-    // Success haptic
-    if (Platform.OS !== "web") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
 
     alert(`A verification code has been sent to ${emailAddress}`);

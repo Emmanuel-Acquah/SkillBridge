@@ -12,7 +12,6 @@ import {
   StatusBar,
 } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import { ArrowLeft, Lock, ShieldCheck, Info, Key, Shield, Fingerprint } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
 import { useTheme } from "../contexts/ThemeContext";
@@ -38,40 +37,21 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [activeInput, setActiveInput] = useState<"pass" | "confirm" | null>(null);
 
-  // Haptic trigger
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   // Back to previous screen
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/OTPVerification" as RelativePathString);
   };
 
   // Submission handler
   const handleUpdatePassword = () => {
     if (!password || !confirmPassword) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Please fill in both password fields.");
       return;
     }
     
     if (password !== confirmPassword) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Passwords do not match.");
       return;
-    }
-
-    // Success haptic
-    if (Platform.OS !== "web") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
 
     alert("Your password has been successfully updated.");

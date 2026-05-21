@@ -13,7 +13,6 @@ import {
   Image,
 } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import { ArrowLeft, Bell, MessageSquare, CloudUpload, Calendar, Send } from "lucide-react-native";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -30,19 +29,11 @@ const Body1 = () => {
   // Focus states
   const [activeInput, setActiveInput] = useState<"details" | "budget" | "deadline" | "notes" | null>(null);
 
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.back();
   };
 
   const handleSendRequest = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Medium);
     router.push("/(screens)/paymentsummary" as RelativePathString);
   };
 
@@ -149,7 +140,7 @@ const Body1 = () => {
                     }
                   ]}
                   activeOpacity={0.7}
-                  onPress={() => triggerHaptic(Haptics.ImpactFeedbackStyle.Light)}
+                  onPress={() => {}}
                 >
                   <CloudUpload size={28} color={theme.colors.primary} style={{ marginBottom: 8 }} />
                   <Text style={[styles.uploadTextBold, { color: isDark ? "#E2E8F0" : "#1A202C" }]}>

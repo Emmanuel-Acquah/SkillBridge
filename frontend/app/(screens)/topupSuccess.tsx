@@ -50,7 +50,7 @@ export default function TopUpSuccessScreen() {
         <View style={styles.actions}>
           <TouchableOpacity 
             style={styles.primaryBtn} 
-            onPress={() => router.push('/(screens)/ClientsDashbord')}
+            onPress={() => router.push('/(tabs)/Home')}
           >
             <Text style={styles.primaryBtnText}>Go to Dashboard</Text>
             <Ionicons name="arrow-forward" size={18} color={C.white} style={{ marginLeft: 4 }} />

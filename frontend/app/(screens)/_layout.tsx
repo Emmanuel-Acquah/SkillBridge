@@ -9,7 +9,7 @@ const ScreensLayout = () => {
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: theme.colors.background },
-        animation: "slide_from_right",
+        animation: "fade",
       }}
     >
       <Stack.Screen name="Notification" />

@@ -12,7 +12,6 @@ import {
   StatusBar,
 } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ArrowLeft } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
@@ -61,65 +60,41 @@ const Register = () => {
   // Focus Input States
   const [activeInput, setActiveInput] = useState<"name" | "email" | "pass" | "confirm" | null>(null);
 
-  // Haptics helper
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   // Back to role selection
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/roleselection" as RelativePathString);
   };
 
   // Toggle round checkbox
   const handleToggleTerms = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     setAgreeToTerms(!agreeToTerms);
   };
 
   // Handle successful registration & save completed state
   const handleRegister = () => {
     if (!fullName || !emailAddress || !password || !confirmPassword) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Please fill in all details to get started.");
       return;
     }
 
     if (password !== confirmPassword) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Passwords do not match.");
       return;
     }
 
     if (!agreeToTerms) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
-      }
       alert("You must agree to the Terms and Privacy Policy to proceed.");
       return;
-    }
-
-    // Success Haptics
-    if (Platform.OS !== "web") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
 
     // Secure onboarding setting so splashscreen knows we logged in
     AsyncStorage.setItem("HAS_COMPLETED_ONBOARDING", "true").catch(() => {});
 
-    // Redirect straight into Dashboard Tab Bar
-    router.replace("/(tabs)/ClientDashboard" as RelativePathString);
+    // Redirect into the tabs layout so the bottom navbar is visible
+    router.replace("/(tabs)/Home" as RelativePathString);
   };
 
   const handleLoginRedirect = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/Login" as RelativePathString);
   };
 
@@ -297,7 +272,7 @@ const Register = () => {
                 <TouchableOpacity
                   style={[styles.socialButton, { borderColor: isDark ? "#2D3748" : "#ECE9F6" }]}
                   activeOpacity={0.85}
-                  onPress={() => triggerHaptic(Haptics.ImpactFeedbackStyle.Light)}
+                  onPress={() => {}}
                 >
                   <GoogleIcon />
                   <Text style={[styles.socialText, { color: isDark ? "#FFFFFF" : "#1A202C" }]}>Google</Text>
@@ -307,7 +282,7 @@ const Register = () => {
                 <TouchableOpacity
                   style={[styles.socialButton, { borderColor: isDark ? "#2D3748" : "#ECE9F6" }]}
                   activeOpacity={0.85}
-                  onPress={() => triggerHaptic(Haptics.ImpactFeedbackStyle.Light)}
+                  onPress={() => {}}
                 >
                   <AppleIcon color={isDark ? "#FFFFFF" : "#000000"} />
                   <Text style={[styles.socialText, { color: isDark ? "#FFFFFF" : "#1A202C" }]}>iOS</Text>
