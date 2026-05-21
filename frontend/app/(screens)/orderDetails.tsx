@@ -104,97 +104,99 @@ export default function OrderDetailsScreen() {
           <Text style={{ color: '#999', fontSize: 14 }}>Loading order details...</Text>
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
-        <View style={styles.heroCard}>
-          <ImageBackground source={details.image} style={styles.heroImage} imageStyle={styles.heroImageInner} resizeMode="cover">
-            <View style={styles.heroTopRow}>
-              <View style={styles.pillInProgress}>
-                <Text style={styles.pillInProgressText}>In Progress</Text>
-              </View>
-              <Text style={styles.orderCode}>{details.orderCode}</Text>
-            </View>
-          </ImageBackground>
-
-          <Text style={styles.title}>{details.title}</Text>
-
-          <View style={styles.metaRow}>
-            <View style={styles.expertWrap}>
-              <Image source={{ uri: job === 'seo' ? 'https://i.pravatar.cc/100?img=5' : 'https://i.pravatar.cc/100?img=12' }} style={styles.avatar} />
-              <View>
-                <Text style={styles.metaName}>{details.expertName}</Text>
-                <Text style={styles.metaSub}>{details.expertRole}</Text>
-              </View>
-            </View>
-            <View style={styles.companyWrap}>
-              <MaterialIcons name="business" size={14} color="#888EA8" />
-              <Text style={styles.companyText}>{details.company}</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.sectionCard}>
-          <View style={styles.sectionHead}>
-            <Text style={styles.sectionLabel}>PROJECT MILESTONE</Text>
-            <Text style={styles.progressLabel}>{details.progress}</Text>
-          </View>
-          <View style={styles.progressTrack}>
-            <View style={[styles.progressFill, { width: details.progress === '25% Complete' ? '25%' : '75%' }]} />
-          </View>
-          <View style={styles.dueRow}>
-            <Ionicons name="time-outline" size={12} color="#DD5B52" />
-            <Text style={styles.dueText}>{details.dueLabel}</Text>
-          </View>
-        </View>
-
-        <Text style={styles.sectionTitle}>MILESTONES</Text>
-        <View style={styles.listCard}>
-          {details.milestones.map((item, index) => {
-            const badge = badgeStyle(item.status);
-            return (
-              <View key={item.name} style={[styles.milestoneItem, index !== details.milestones.length - 1 && styles.itemDivider]}>
-                <View style={styles.leftAccent} />
-                <View style={styles.milestoneBody}>
-                  <Text style={styles.milestoneTitle}>{item.name}</Text>
-                  <Text style={styles.milestoneSub}>{item.due}</Text>
+        <>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+            <View style={styles.heroCard}>
+              <ImageBackground source={details.image} style={styles.heroImage} imageStyle={styles.heroImageInner} resizeMode="cover">
+                <View style={styles.heroTopRow}>
+                  <View style={styles.pillInProgress}>
+                    <Text style={styles.pillInProgressText}>In Progress</Text>
+                  </View>
+                  <Text style={styles.orderCode}>{details.orderCode}</Text>
                 </View>
-                <View style={[styles.statePill, { backgroundColor: badge.bg }]}>
-                  <Text style={[styles.statePillText, { color: badge.text }]}>{item.status}</Text>
+              </ImageBackground>
+
+              <Text style={styles.title}>{details.title}</Text>
+
+              <View style={styles.metaRow}>
+                <View style={styles.expertWrap}>
+                  <Image source={{ uri: job === 'seo' ? 'https://i.pravatar.cc/100?img=5' : 'https://i.pravatar.cc/100?img=12' }} style={styles.avatar} />
+                  <View>
+                    <Text style={styles.metaName}>{details.expertName}</Text>
+                    <Text style={styles.metaSub}>{details.expertRole}</Text>
+                  </View>
+                </View>
+                <View style={styles.companyWrap}>
+                  <MaterialIcons name="business" size={14} color="#888EA8" />
+                  <Text style={styles.companyText}>{details.company}</Text>
                 </View>
               </View>
-            );
-          })}
-        </View>
-
-        <View style={styles.sectionHeaderRow}>
-          <Text style={styles.sectionTitle}>FILES DELIVERED</Text>
-          <TouchableOpacity onPress={() => router.push(`/(screens)/deliveryReview?job=${job ?? 'fintech'}`)}>
-            <Text style={styles.downloadAll}>View Delivery</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.listCard}>
-          {details.files.map((file, index) => (
-            <View key={file.name} style={[styles.fileItem, index !== details.files.length - 1 && styles.itemDivider]}>
-              <View style={styles.fileLeft}>
-                <View style={styles.fileIconBox}>
-                  <Ionicons name="document-text-outline" size={15} color={C.purple} />
-                </View>
-                <View>
-                  <Text style={styles.fileName}>{file.name}</Text>
-                  <Text style={styles.fileSize}>{file.size}</Text>
-                </View>
-              </View>
-              <Ionicons name="download-outline" size={17} color={C.purple} />
             </View>
-          ))}
-        </View>
 
-        </ScrollView>
-        <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
-          <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
-            <Text style={styles.revisionBtnText}>Request Revision</Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHead}>
+                <Text style={styles.sectionLabel}>PROJECT MILESTONE</Text>
+                <Text style={styles.progressLabel}>{details.progress}</Text>
+              </View>
+              <View style={styles.progressTrack}>
+                <View style={[styles.progressFill, { width: details.progress === '25% Complete' ? '25%' : '75%' }]} />
+              </View>
+              <View style={styles.dueRow}>
+                <Ionicons name="time-outline" size={12} color="#DD5B52" />
+                <Text style={styles.dueText}>{details.dueLabel}</Text>
+              </View>
+            </View>
+
+            <Text style={styles.sectionTitle}>MILESTONES</Text>
+            <View style={styles.listCard}>
+              {details.milestones.map((item, index) => {
+                const badge = badgeStyle(item.status);
+                return (
+                  <View key={item.name} style={[styles.milestoneItem, index !== details.milestones.length - 1 && styles.itemDivider]}>
+                    <View style={styles.leftAccent} />
+                    <View style={styles.milestoneBody}>
+                      <Text style={styles.milestoneTitle}>{item.name}</Text>
+                      <Text style={styles.milestoneSub}>{item.due}</Text>
+                    </View>
+                    <View style={[styles.statePill, { backgroundColor: badge.bg }]}>
+                      <Text style={[styles.statePillText, { color: badge.text }]}>{item.status}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+
+            <View style={styles.sectionHeaderRow}>
+              <Text style={styles.sectionTitle}>FILES DELIVERED</Text>
+              <TouchableOpacity onPress={() => router.push(`/(screens)/deliveryReview?job=${job ?? 'fintech'}`)}>
+                <Text style={styles.downloadAll}>View Delivery</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.listCard}>
+              {details.files.map((file, index) => (
+                <View key={file.name} style={[styles.fileItem, index !== details.files.length - 1 && styles.itemDivider]}>
+                  <View style={styles.fileLeft}>
+                    <View style={styles.fileIconBox}>
+                      <Ionicons name="document-text-outline" size={15} color={C.purple} />
+                    </View>
+                    <View>
+                      <Text style={styles.fileName}>{file.name}</Text>
+                      <Text style={styles.fileSize}>{file.size}</Text>
+                    </View>
+                  </View>
+                  <Ionicons name="download-outline" size={17} color={C.purple} />
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+
+          <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
+            <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
+              <Text style={styles.revisionBtnText}>Request Revision</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </SafeAreaView>
   );
