@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../constants/Theme';
 
 const FILES_FINTECH = [
@@ -17,6 +18,7 @@ const FILES_SEO = [
 
 export default function DeliveryReviewScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { job } = useLocalSearchParams<{ job?: string }>();
 
   const FILES = job === 'seo' ? FILES_SEO : FILES_FINTECH;
@@ -113,11 +115,11 @@ export default function DeliveryReviewScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: 14 + insets.bottom }] }>
         <TouchableOpacity style={styles.approveBtn}>
           <Text style={styles.approveText}>Approve Delivery</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push('/(screens)/requestRevision')}>
+        <TouchableOpacity style={styles.revisionBtn} onPress={() => router.push(`/(screens)/requestRevision?job=${job ?? 'fintech'}`)}>
           <Text style={styles.revisionText}>Request Revision</Text>
         </TouchableOpacity>
       </View>
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 21, fontWeight: '700', color: '#1F2638' },
   headerSub: { marginTop: 1, fontSize: 9, color: '#9599AC', fontWeight: '700', letterSpacing: 0.4 },
 
-  content: { paddingHorizontal: 10, paddingBottom: 120 },
+  content: { paddingHorizontal: 10, paddingBottom: 170 },
   awaitingCard: {
     marginTop: 8,
     flexDirection: 'row',

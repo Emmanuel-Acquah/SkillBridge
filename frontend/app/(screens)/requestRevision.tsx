@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../constants/Theme';
 
 export default function RequestRevisionScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { job } = useLocalSearchParams<{ job?: string }>();
   const [note, setNote] = useState('');
 
@@ -74,7 +76,7 @@ export default function RequestRevisionScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }] }>
         <TouchableOpacity style={styles.submitBtn}>
           <Text style={styles.submitText}>Submit Revision Request</Text>
           <Ionicons name="paper-plane-outline" size={14} color="#FFFFFF" />
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
   iconBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#20283B' },
 
-  content: { paddingHorizontal: 10, paddingBottom: 120 },
+  content: { paddingHorizontal: 10, paddingBottom: 170 },
   contextCard: {
     marginTop: 8,
     backgroundColor: '#ECECF4',
