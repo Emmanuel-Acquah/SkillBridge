@@ -16,6 +16,8 @@ const AuthLayout = () => {
       <Stack.Screen name="Login" />
       <Stack.Screen name="Register" />
       <Stack.Screen name="ForgotPassword" />
+      <Stack.Screen name="OTPVerification" />
+      <Stack.Screen name="ResetPassword" />
       <Stack.Screen name="OnboardService" />
       <Stack.Screen name="CompleteProfile" />
       <Stack.Screen name="AddServices" />

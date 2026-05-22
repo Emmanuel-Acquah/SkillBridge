@@ -14,11 +14,11 @@ import {
 import { useRouter, type RelativePathString } from "expo-router";
 import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ArrowLeft, Lock, Eye, EyeOff } from "lucide-react-native";
+import { ArrowLeft } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
 import { useTheme } from "../contexts/ThemeContext";
 
-// Vector Google Icon SVG
+// Signature Vector Google Icon SVG
 const GoogleIcon = () => (
   <Svg width={18} height={18} viewBox="0 0 24 24" style={{ marginRight: 8 }}>
     <Path
@@ -47,42 +47,66 @@ const AppleIcon = ({ color }: { color: string }) => (
   </Svg>
 );
 
-const Login = () => {
+const Register = () => {
   const router = useRouter();
   const { theme, isDark } = useTheme();
 
-  // Input states
+  // Form Field States
+  const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   // Focus Input States
-  const [activeInput, setActiveInput] = useState<"email" | "pass" | null>(null);
+  const [activeInput, setActiveInput] = useState<"name" | "email" | "pass" | "confirm" | null>(null);
 
-  // Haptic trigger
+  // Haptics helper
   const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
     if (Platform.OS !== "web") {
       Haptics.impactAsync(style).catch(() => {});
     }
   };
 
-  // Back to welcome swiper
+  // Back to role selection
   const handleBack = () => {
     triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-    router.replace("/(screens)/onboardingscreen1" as RelativePathString);
+    router.replace("/(screens)/roleselection" as RelativePathString);
   };
 
-  // Sign In handler
-  const handleSignIn = () => {
-    if (!emailAddress || !password) {
+  // Toggle round checkbox
+  const handleToggleTerms = () => {
+    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
+    setAgreeToTerms(!agreeToTerms);
+  };
+
+  // Handle successful registration & save completed state
+  const handleRegister = () => {
+    if (!fullName || !emailAddress || !password || !confirmPassword) {
       if (Platform.OS !== "web") {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
       }
-      alert("Please fill in both email and password.");
+      alert("Please fill in all details to get started.");
       return;
     }
 
-    // Success haptic
+    if (password !== confirmPassword) {
+      if (Platform.OS !== "web") {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
+      }
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (!agreeToTerms) {
+      if (Platform.OS !== "web") {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
+      }
+      alert("You must agree to the Terms and Privacy Policy to proceed.");
+      return;
+    }
+
+    // Success Haptics
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
@@ -90,29 +114,24 @@ const Login = () => {
     // Secure onboarding setting so splashscreen knows we logged in
     AsyncStorage.setItem("HAS_COMPLETED_ONBOARDING", "true").catch(() => {});
 
-    // Redirect cleanly into ClientDashboard Tabs
+    // Redirect straight into Dashboard Tab Bar
     router.replace("/(tabs)/ClientDashboard" as RelativePathString);
   };
 
-  const handleCreateAccountRedirect = () => {
+  const handleLoginRedirect = () => {
     triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-    router.replace("/(screens)/roleselection" as RelativePathString);
-  };
-
-  const handleForgotPasswordRedirect = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-    router.replace("/(screens)/ForgotPassword" as RelativePathString);
+    router.replace("/(screens)/Login" as RelativePathString);
   };
 
   // Dynamic input styling
-  const getInputStyle = (fieldName: "email" | "pass") => {
+  const getInputStyle = (fieldName: "name" | "email" | "pass" | "confirm") => {
     const isFocused = activeInput === fieldName;
     return [
       styles.inputContainer,
       {
-        backgroundColor: isDark ? "#1C1D26" : "#F5F3FF",
-        borderColor: isFocused ? theme.colors.primary : "transparent",
-        borderWidth: isFocused ? 1.5 : 0,
+        backgroundColor: isDark ? "#1C1D26" : "#FFFFFF",
+        borderColor: isFocused ? theme.colors.primary : (isDark ? theme.colors.inputBorder : "#ECE9F6"),
+        borderWidth: isFocused ? 1.5 : 1,
       },
     ];
   };
@@ -121,7 +140,7 @@ const Login = () => {
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? "#0A0B10" : "#F4F0FA" }]}>
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
 
-      {/* Top Header Bar */}
+      {/* Header with back navigation & Brand */}
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton} 
@@ -135,7 +154,7 @@ const Login = () => {
           SkillBridge
         </Text>
         
-        {/* Spacer for layout symmetry */}
+        {/* Spacer for balanced alignment */}
         <View style={styles.spacer} />
       </View>
 
@@ -147,19 +166,35 @@ const Login = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {/* Central Rounded White Form Card */}
+          {/* Main White/Surface Card Container */}
           <View style={[styles.card, { backgroundColor: isDark ? "#12131A" : "#FFFFFF" }]}>
             
             <Text style={[styles.title, { color: isDark ? "#FFFFFF" : "#000000" }]}>
-              Welcome Back
+              Create your account
             </Text>
             <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-              Access your premium learning workspace.
+              Enter your details to get started.
             </Text>
 
-            {/* Inputs Wrapper */}
+            {/* Inputs Block */}
             <View style={styles.formContainer}>
               
+              {/* FULL NAME */}
+              <View style={styles.fieldWrapper}>
+                <Text style={[styles.label, { color: isDark ? "#A0AEC0" : "#6B7280" }]}>FULL NAME</Text>
+                <View style={getInputStyle("name")}>
+                  <TextInput
+                    style={[styles.input, { color: isDark ? "#FFFFFF" : "#1A202C" }]}
+                    placeholder="John Doe"
+                    placeholderTextColor="#CBD5E0"
+                    value={fullName}
+                    onChangeText={setFullName}
+                    onFocus={() => setActiveInput("name")}
+                    onBlur={() => setActiveInput(null)}
+                  />
+                </View>
+              </View>
+
               {/* EMAIL ADDRESS */}
               <View style={styles.fieldWrapper}>
                 <Text style={[styles.label, { color: isDark ? "#A0AEC0" : "#6B7280" }]}>EMAIL ADDRESS</Text>
@@ -178,58 +213,80 @@ const Login = () => {
                 </View>
               </View>
 
-              {/* PASSWORD with Forgot link */}
+              {/* PASSWORD */}
               <View style={styles.fieldWrapper}>
-                <View style={styles.passwordLabelRow}>
-                  <Text style={[styles.label, { color: isDark ? "#A0AEC0" : "#6B7280" }]}>PASSWORD</Text>
-                  <TouchableOpacity activeOpacity={0.7} onPress={handleForgotPasswordRedirect}>
-                    <Text style={[styles.forgotText, { color: theme.colors.primary }]}>Forgot?</Text>
-                  </TouchableOpacity>
-                </View>
-
+                <Text style={[styles.label, { color: isDark ? "#A0AEC0" : "#6B7280" }]}>PASSWORD</Text>
                 <View style={getInputStyle("pass")}>
-                  <Lock size={16} color="#A0AEC0" style={styles.leftIcon} />
                   <TextInput
                     style={[styles.input, { color: isDark ? "#FFFFFF" : "#1A202C" }]}
                     placeholder="••••••••"
                     placeholderTextColor="#CBD5E0"
-                    secureTextEntry={!showPassword}
+                    secureTextEntry
                     autoCapitalize="none"
                     value={password}
                     onChangeText={setPassword}
                     onFocus={() => setActiveInput("pass")}
                     onBlur={() => setActiveInput(null)}
                   />
-                  <TouchableOpacity
-                    style={styles.rightIcon}
-                    onPress={() => {
-                      triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-                      setShowPassword(!showPassword);
-                    }}
-                  >
-                    {showPassword ? (
-                      <EyeOff size={16} color="#A0AEC0" />
-                    ) : (
-                      <Eye size={16} color="#A0AEC0" />
-                    )}
-                  </TouchableOpacity>
                 </View>
               </View>
+
+              {/* CONFIRM PASSWORD */}
+              <View style={styles.fieldWrapper}>
+                <Text style={[styles.label, { color: isDark ? "#A0AEC0" : "#6B7280" }]}>CONFIRM</Text>
+                <View style={getInputStyle("confirm")}>
+                  <TextInput
+                    style={[styles.input, { color: isDark ? "#FFFFFF" : "#1A202C" }]}
+                    placeholder="••••••••"
+                    placeholderTextColor="#CBD5E0"
+                    secureTextEntry
+                    autoCapitalize="none"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    onFocus={() => setActiveInput("confirm")}
+                    onBlur={() => setActiveInput(null)}
+                  />
+                </View>
+              </View>
+
+              {/* Round Checkbox (Terms & Privacy) */}
+              <TouchableOpacity
+                style={styles.termsWrapper}
+                onPress={handleToggleTerms}
+                activeOpacity={0.8}
+              >
+                <View 
+                  style={[
+                    styles.checkboxCircle, 
+                    { 
+                      borderColor: agreeToTerms ? theme.colors.primary : "#CBD5E0",
+                      backgroundColor: agreeToTerms ? theme.colors.primary : "transparent"
+                    }
+                  ]}
+                >
+                  {agreeToTerms && (
+                    <View style={styles.checkboxInner} />
+                  )}
+                </View>
+                <Text style={[styles.termsText, { color: isDark ? "#CBD5E0" : "#4A5568" }]}>
+                  I agree to the <Text style={{ color: theme.colors.primary, fontWeight: "bold" }}>Terms</Text> and <Text style={{ color: theme.colors.primary, fontWeight: "bold" }}>Privacy Policy</Text>.
+                </Text>
+              </TouchableOpacity>
 
               {/* Main Submit Action */}
               <TouchableOpacity
                 style={[styles.submitButton, { backgroundColor: theme.colors.primary }]}
                 activeOpacity={0.95}
-                onPress={handleSignIn}
+                onPress={handleRegister}
               >
-                <Text style={styles.submitText}>Sign In</Text>
+                <Text style={styles.submitText}>Register Account</Text>
               </TouchableOpacity>
 
-              {/* Secure Authentication Divider */}
+              {/* Social login divider */}
               <View style={styles.dividerRow}>
                 <View style={[styles.dividerLine, { backgroundColor: isDark ? "#2D3748" : "#ECE9F6" }]} />
-                <Text style={[styles.dividerText, { color: isDark ? "#A0AEC0" : "#9CA3AF" }]}>
-                  SECURE AUTHENTICATION
+                <Text style={[styles.dividerText, { color: isDark ? "#A0AEC0" : "#718096" }]}>
+                  OR REGISTER WITH
                 </Text>
                 <View style={[styles.dividerLine, { backgroundColor: isDark ? "#2D3748" : "#ECE9F6" }]} />
               </View>
@@ -260,13 +317,13 @@ const Login = () => {
             </View>
           </View>
 
-          {/* Account Creator Link (Outside Card, centered at bottom) */}
-          <View style={styles.signupRow}>
-            <Text style={[styles.signupLabel, { color: isDark ? "#A0AEC0" : "#718096" }]}>
-              New to the platform?{" "}
+          {/* Login Switcher (Outside the Card, as positioned in screenshot) */}
+          <View style={styles.loginRow}>
+            <Text style={[styles.loginLabel, { color: isDark ? "#A0AEC0" : "#718096" }]}>
+              Already have an account?{" "}
             </Text>
-            <TouchableOpacity onPress={handleCreateAccountRedirect} activeOpacity={0.7}>
-              <Text style={[styles.signupActionText, { color: theme.colors.primary }]}>Create Account</Text>
+            <TouchableOpacity onPress={handleLoginRedirect} activeOpacity={0.7}>
+              <Text style={[styles.loginActionText, { color: theme.colors.primary }]}>Log In</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -307,14 +364,14 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingTop: 12,
     paddingBottom: 40,
     alignItems: "center",
   },
   card: {
     width: "100%",
     borderRadius: 36,
-    paddingVertical: 36,
+    paddingVertical: 32,
     paddingHorizontal: 28,
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 10 },
@@ -332,14 +389,14 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     textAlign: "center",
-    marginBottom: 32,
+    marginBottom: 28,
   },
   formContainer: {
     width: "100%",
   },
   fieldWrapper: {
     width: "100%",
-    marginBottom: 20,
+    marginBottom: 16,
   },
   label: {
     fontSize: 10,
@@ -347,35 +404,43 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     marginBottom: 8,
   },
-  passwordLabelRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  forgotText: {
-    fontSize: 12,
-    fontWeight: "bold",
-  },
   inputContainer: {
     width: "100%",
     height: 52,
     borderRadius: 12,
     paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  leftIcon: {
-    marginRight: 10,
-  },
-  rightIcon: {
-    padding: 4,
+    justifyContent: "center",
   },
   input: {
-    flex: 1,
     fontSize: 14,
     fontWeight: "500",
     height: "100%",
+  },
+  termsWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 18,
+    paddingRight: 12,
+  },
+  checkboxCircle: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 1.5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
+  checkboxInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#FFFFFF",
+  },
+  termsText: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "500",
   },
   submitButton: {
     width: "100%",
@@ -383,8 +448,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 8,
-    marginBottom: 28,
+    marginBottom: 24,
     shadowColor: "#6B21A8",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.2,
@@ -400,14 +464,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 24,
+    marginBottom: 20,
   },
   dividerLine: {
     flex: 1,
     height: 1,
   },
   dividerText: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: "bold",
     letterSpacing: 0.8,
     marginHorizontal: 12,
@@ -430,20 +494,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  signupRow: {
+  loginRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 28,
+    marginTop: 24,
   },
-  signupLabel: {
+  loginLabel: {
     fontSize: 14,
     fontWeight: "500",
   },
-  signupActionText: {
+  loginActionText: {
     fontSize: 14,
     fontWeight: "bold",
   },
 });
 
-export default Login;
+export default Register;
