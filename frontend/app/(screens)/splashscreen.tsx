@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text, Platform, StatusBar } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -22,39 +21,15 @@ const SplashScreen = () => {
   const glowOpacity = useSharedValue(0);
   const contentFadeOut = useSharedValue(1);
 
-  // Trigger haptic feedback safely
-  const triggerHaptic = () => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    }
-  };
+  // Haptics disabled to avoid vibration/shake on startup
+  const triggerHaptic = () => {};
 
-  // Reference to track persistent onboarding completion status
-  const hasCompletedOnboarding = useRef(false);
-
-  // Navigate to the correct next screen
+  // Navigate to the onboarding flow
   const navigateToNext = () => {
-    if (hasCompletedOnboarding.current) {
-      router.replace("/(screens)/Register" as RelativePathString);
-    } else {
-      router.replace("/(screens)/onboardingscreen1" as RelativePathString);
-    }
+    router.replace("/(screens)/onboardingscreen1" as RelativePathString);
   };
 
   useEffect(() => {
-    // Load onboarding status persistently on mount
-    const checkOnboardingStatus = async () => {
-      try {
-        const val = await AsyncStorage.getItem("HAS_COMPLETED_ONBOARDING");
-        if (val === "true") {
-          hasCompletedOnboarding.current = true;
-        }
-      } catch {
-        // Safe fallback
-      }
-    };
-    checkOnboardingStatus();
-
     // 1. Fade in and scale the ambient glow
     glowOpacity.value = withTiming(0.45, {
       duration: 1200,
@@ -81,10 +56,6 @@ const SplashScreen = () => {
         {
           duration: 1000,
           easing: Easing.bezier(0.16, 1, 0.3, 1),
-        },
-        () => {
-          // Trigger a subtle touch response once the logo settles
-          runOnJS(triggerHaptic)();
         }
       )
     );
@@ -99,7 +70,7 @@ const SplashScreen = () => {
           easing: Easing.bezier(0.33, 1, 0.68, 1),
         },
         () => {
-          // Transition to the Registration screen
+          // Transition to the onboarding flow
           runOnJS(navigateToNext)();
         }
       ));

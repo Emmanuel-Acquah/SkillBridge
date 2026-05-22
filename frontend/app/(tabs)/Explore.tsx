@@ -11,6 +11,7 @@ const TEXT_GREY = '#9B9BB0';
 const exploreItems = [
   {
     id: '1',
+    talent: 'uiux',
     image: require('../../assets/images/UIdesign.jpg'),
     author: 'Sarah Jenkins',
     title: 'Expert UI/UX Design for Fintech & SaaS Products',
@@ -21,6 +22,7 @@ const exploreItems = [
   },
   {
     id: '2',
+    talent: 'finance',
     image: require('../../assets/images/forex.jpg'),
     author: 'David Chen',
     title: 'Tax Strategy & Financial Audit for Startups',
@@ -31,6 +33,7 @@ const exploreItems = [
   },
   {
     id: '3',
+    talent: 'branding',
     image: require('../../assets/images/corporate.jpg'),
     author: 'Elena Rodriguez',
     title: 'Brand Identity & Visual Storytelling for Fintech',
@@ -41,6 +44,7 @@ const exploreItems = [
   },
   {
     id: '4',
+    talent: 'web3',
     image: require('../../assets/images/smartsecurity.jpg'),
     author: 'Marcus Thorne',
     title: 'Smart Contract Security Audit & Web3 Dev',
@@ -104,7 +108,7 @@ export default function ExploreScreen() {
 
         <View style={styles.listContainer}>
           {exploreItems.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.card} activeOpacity={0.9}>
+            <TouchableOpacity key={item.id} style={styles.card} activeOpacity={0.9} onPress={() => router.push(`/(screens)/expertProfile?talent=${item.talent}`)}>
               <ImageBackground source={item.image} style={styles.cardImage} imageStyle={{ borderRadius: 12 }}>
                 <View style={styles.ratingBadge}>
                   <Text style={styles.starIcon}>★</Text>

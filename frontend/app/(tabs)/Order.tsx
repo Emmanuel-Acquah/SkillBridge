@@ -19,7 +19,7 @@ export default function OrderScreen() {
           <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/(screens)/Notification')}>
             <Ionicons name="notifications-outline" size={24} color={TEXT_DARK} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/(tabs)/Messages')}>
+          <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/(tabs)/Messages?from=order')}>
             <Ionicons name="chatbubble-ellipses-outline" size={23} color={TEXT_DARK} />
           </TouchableOpacity>
           <View style={styles.userAvatar}>
@@ -53,7 +53,7 @@ export default function OrderScreen() {
         <View style={styles.contentList}>
           {/* Main Card with Image */}
           <TouchableOpacity style={styles.orderCard} activeOpacity={0.9}>
-            <ImageBackground source={require('../../assets/images/blockchain.jpg')} style={styles.cardImage} imageStyle={{ borderRadius: 16 }} />
+            <ImageBackground source={require('../../assets/images/mobileappdesign.jpg')} style={styles.cardImage} imageStyle={{ borderRadius: 16 }} />
             
             <View style={styles.cardInfo}>
               <View style={styles.badgeRow}>
@@ -82,10 +82,10 @@ export default function OrderScreen() {
               </View>
 
               <View style={styles.actionRow}>
-                <TouchableOpacity style={styles.btnPrimary}>
+                <TouchableOpacity style={styles.btnPrimary} onPress={() => router.push(`/(screens)/orderDetails?job=fintech`)}>
                   <Text style={styles.btnPrimaryText}>View Details</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnSecondary} onPress={() => router.push('/(tabs)/Messages')}>
+                <TouchableOpacity style={styles.btnSecondary} onPress={() => router.push('/(tabs)/Messages?from=order')}>
                   <Text style={styles.btnSecondaryText}>Message</Text>
                 </TouchableOpacity>
               </View>
@@ -113,7 +113,7 @@ export default function OrderScreen() {
           </View>
 
           {/* Secondary Card 1 */}
-          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8} onPress={() => router.push(`/(screens)/deliveryReview?job=fintech`)}>
             <View style={styles.badgeRow}>
               <View style={styles.statusBadgeOrange}>
                 <Text style={styles.statusTextOrange}>Awaiting Review</Text>
@@ -135,7 +135,7 @@ export default function OrderScreen() {
           </TouchableOpacity>
 
           {/* Secondary Card 2 */}
-          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.simpleCard} activeOpacity={0.8} onPress={() => router.push(`/(screens)/orderDetails?job=seo`)}>
             <View style={styles.badgeRow}>
               <View style={styles.statusBadgeGreen}>
                 <Text style={styles.statusTextGreen}>In Progress</Text>

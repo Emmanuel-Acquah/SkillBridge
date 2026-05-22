@@ -12,7 +12,6 @@ import {
   StatusBar,
 } from "react-native";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ArrowLeft, Lock, Eye, EyeOff } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
@@ -59,48 +58,30 @@ const Login = () => {
   // Focus Input States
   const [activeInput, setActiveInput] = useState<"email" | "pass" | null>(null);
 
-  // Haptic trigger
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   // Back to welcome swiper
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/onboardingscreen1" as RelativePathString);
   };
 
   // Sign In handler
   const handleSignIn = () => {
     if (!emailAddress || !password) {
-      if (Platform.OS !== "web") {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-      }
       alert("Please fill in both email and password.");
       return;
-    }
-
-    // Success haptic
-    if (Platform.OS !== "web") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
 
     // Secure onboarding setting so splashscreen knows we logged in
     AsyncStorage.setItem("HAS_COMPLETED_ONBOARDING", "true").catch(() => {});
 
-    // Redirect cleanly into ClientDashboard Tabs
-    router.replace("/(tabs)/ClientDashboard" as RelativePathString);
+    // Redirect into the tabs layout so the bottom navbar is visible
+    router.replace("/(tabs)/Home" as RelativePathString);
   };
 
   const handleCreateAccountRedirect = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/roleselection" as RelativePathString);
   };
 
   const handleForgotPasswordRedirect = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/ForgotPassword" as RelativePathString);
   };
 
@@ -202,10 +183,7 @@ const Login = () => {
                   />
                   <TouchableOpacity
                     style={styles.rightIcon}
-                    onPress={() => {
-                      triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
-                      setShowPassword(!showPassword);
-                    }}
+                    onPress={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
                       <EyeOff size={16} color="#A0AEC0" />
@@ -240,7 +218,7 @@ const Login = () => {
                 <TouchableOpacity
                   style={[styles.socialButton, { borderColor: isDark ? "#2D3748" : "#ECE9F6" }]}
                   activeOpacity={0.85}
-                  onPress={() => triggerHaptic(Haptics.ImpactFeedbackStyle.Light)}
+                  onPress={() => {}}
                 >
                   <GoogleIcon />
                   <Text style={[styles.socialText, { color: isDark ? "#FFFFFF" : "#1A202C" }]}>Google</Text>
@@ -250,7 +228,7 @@ const Login = () => {
                 <TouchableOpacity
                   style={[styles.socialButton, { borderColor: isDark ? "#2D3748" : "#ECE9F6" }]}
                   activeOpacity={0.85}
-                  onPress={() => triggerHaptic(Haptics.ImpactFeedbackStyle.Light)}
+                  onPress={() => {}}
                 >
                   <AppleIcon color={isDark ? "#FFFFFF" : "#000000"} />
                   <Text style={[styles.socialText, { color: isDark ? "#FFFFFF" : "#1A202C" }]}>iOS</Text>

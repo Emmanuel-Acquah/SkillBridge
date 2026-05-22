@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter, type RelativePathString } from "expo-router";
-import * as Haptics from "expo-haptics";
 import {
   ArrowLeft,
   Briefcase,
@@ -33,30 +32,20 @@ const RoleSelectionScreen = () => {
   const clientVisual = require("../../assets/images/role_client_visual.png");
   const providerVisual = require("../../assets/images/role_provider_visual.png");
 
-  // Haptic feedback helper
-  const triggerHaptic = (style: Haptics.ImpactFeedbackStyle) => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(style).catch(() => {});
-    }
-  };
-
   // Select role handler
   const handleSelectRole = (role: "client" | "provider") => {
     if (selectedRole !== role) {
       setSelectedRole(role);
-      triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     }
   };
 
   // Back to welcome screen
   const handleBack = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Light);
     router.replace("/(screens)/welcomescreen" as RelativePathString);
   };
 
   // Continue to Registration Screen
   const handleContinue = () => {
-    triggerHaptic(Haptics.ImpactFeedbackStyle.Medium);
     router.replace("/(screens)/Register" as RelativePathString);
   };
 

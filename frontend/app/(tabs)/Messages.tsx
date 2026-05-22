@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const PURPLE = '#6B5CE7';
 const TEXT_DARK = '#1A1A2E';
@@ -56,11 +56,22 @@ const conversations = [
 ];
 
 export default function MessagesScreen() {
+  const { from } = useLocalSearchParams<{ from?: string }>();
+
   return (
     <SafeAreaView style={styles.safe}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => {
+            if (from === 'order') {
+              router.replace('/(tabs)/Order');
+              return;
+            }
+            router.back();
+          }}
+        >
           <Ionicons name="arrow-back" size={22} color={TEXT_DARK} />
         </TouchableOpacity>
         <Text style={styles.logo}>SkillBridge</Text>
